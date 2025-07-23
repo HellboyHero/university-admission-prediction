@@ -1,0 +1,217 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Universities - Admission Predictor{% endblock %}
+
+{% block extra_css %}
+<style>
+    .filter-section {
+        background: var(--neutral);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .college-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+        margin-bottom: 1.5rem;
+    }
+    
+    .college-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .college-header {
+        background: linear-gradient(135deg, var(--primary) 0%, #34495E 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 12px 12px 0 0;
+    }
+    
+    .college-stats {
+        display: flex;
+        gap: 1.5rem;
+        padding: 1rem;
+        background: var(--neutral);
+        border-radius: 0 0 12px 12px;
+    }
+    
+    .stat-item {
+        text-align: center;
+    }
+    
+    .stat-value {
+        font-weight: bold;
+        color: var(--primary);
+    }
+    
+    .search-box {
+        background: white;
+        border-radius: 50px;
+        padding: 0.5rem 1rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .country-section {
+        margin-bottom: 3rem;
+    }
+
+    .country-header {
+        background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .country-header h2 {
+        margin: 0;
+        font-size: 1.5rem;
+    }
+
+    .country-flag {
+        width: 2rem;
+        height: 2rem;
+        margin-right: 1rem;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .country-stats {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Search and Filter Section -->
+    <div class="filter-section">
+        <form method="get" class="row g-3" id="filterForm">
+            <!-- Search Box -->
+            <div class="col-md-12 mb-4">
+                <div class="search-box">
+                    <div class="input-group">
+                        <span class="input-group-text border-0 bg-transparent">
+                            <i class="fas fa-search text-muted"></i>
+                        </span>
+                        <input type="text" name="q" class="form-control border-0" placeholder="Search universities by name or description..." value="{{ search_query }}">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Filters -->
+            <div class="col-md-4">
+                <label class="form-label">Country</label>
+                <select name="country" class="form-select" onchange="this.form.submit()">
+                    <option value="">All Countries</option>
+                    {% for country_name in countries %}
+                    <option value="{{ country_name }}" {% if selected_country == country_name %}selected{% endif %}>
+                        {{ country_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="col-md-4">
+                <label class="form-label">Acceptance Rate</label>
+                <select name="acceptance_rate" class="form-select" onchange="this.form.submit()">
+                    <option value="">All Rates</option>
+                    <option value="very_selective" {% if acceptance_rate_filter == 'very_selective' %}selected{% endif %}>Very Selective (<10%)</option>
+                    <option value="selective" {% if acceptance_rate_filter == 'selective' %}selected{% endif %}>Selective (10-20%)</option>
+                    <option value="moderate" {% if acceptance_rate_filter == 'moderate' %}selected{% endif %}>Moderate (20-30%)</option>
+                </select>
+            </div>
+            
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="button" class="btn btn-secondary w-100" onclick="resetFilters()">
+                    <i class="fas fa-undo me-2"></i>Reset Filters
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- College Cards Grouped by Country -->
+    {% if colleges_by_country %}
+        {% for country, colleges in colleges_by_country.items %}
+        <div class="country-section">
+            <div class="country-header">
+                <div class="d-flex align-items-center">
+                    <img src="{% static 'predictor/images/flags/'|add:country|add:'.png' %}" alt="{{ country }} flag" class="country-flag">
+                    <h2 class="mb-0">{{ country }}</h2>
+                </div>
+                <div class="country-stats">
+                    {{ colleges|length }} Universities
+                </div>
+            </div>
+            
+            <div class="row">
+                {% for college in colleges %}
+                <div class="col-lg-6 mb-4">
+                    <div class="college-card">
+                        <div class="college-header">
+                            <h3 class="mb-2">{{ college.name }}</h3>
+                            <p class="mb-0">
+                                <i class="fas fa-map-marker-alt me-2"></i>{{ college.location }}
+                            </p>
+                        </div>
+                        
+                        <div class="p-3">
+                            <p class="text-muted mb-3">{{ college.description }}</p>
+                            <div class="mb-3">
+                                <strong>Requirements:</strong>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check-circle text-success me-2"></i>Min. GRE Score: {{ college.min_gre_score }}</li>
+                                    <li><i class="fas fa-check-circle text-success me-2"></i>Min. TOEFL Score: {{ college.min_toefl_score }}</li>
+                                    <li><i class="fas fa-check-circle text-success me-2"></i>Min. CGPA: {{ college.min_cgpa }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="college-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">#{{ college.ranking }}</div>
+                                <small class="text-muted">Ranking</small>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">{{ college.acceptance_rate }}%</div>
+                                <small class="text-muted">Acceptance Rate</small>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${{ college.tuition|floatformat:0|intcomma }}</div>
+                                <small class="text-muted">Tuition/Year</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+            <h4>No universities found matching your criteria</h4>
+            <p class="text-muted">Try adjusting your filters or search terms</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function resetFilters() {
+    window.location.href = window.location.pathname;
+}
+</script>
+{% endblock %}

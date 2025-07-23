@@ -1,0 +1,11 @@
+name,location,description,acceptance_rate,ranking,tuition,student_faculty_ratio,total_enrollment,average_gre,average_toefl,website
+Massachusetts Institute of Technology,Cambridge MA,A leading research university focused on science and technology,7.3,1,53790,3.1,11376,328,110,https://www.mit.edu
+Stanford University,Stanford CA,A world-renowned private research university,4.7,2,56169,4.2,17249,324,108,https://www.stanford.edu
+Harvard University,Cambridge MA,America's oldest institution of higher learning,5.2,3,54768,6.8,21015,325,109,https://www.harvard.edu
+California Institute of Technology,Pasadena CA,A world-renowned science and engineering research and education institution,6.4,4,54600,3.0,2237,329,111,https://www.caltech.edu
+University of California Berkeley,Berkeley CA,A public research university and founding member of the Association of American Universities,17.5,5,44007,18.1,42501,320,105,https://www.berkeley.edu
+Georgia Institute of Technology,Atlanta GA,A leading research university committed to improving the human condition through advanced science and technology,21.3,6,33794,19.1,36489,318,103,https://www.gatech.edu
+Carnegie Mellon University,Pittsburgh PA,A private research university known for its programs in computer science and engineering,17.1,7,57560,10.2,14799,322,106,https://www.cmu.edu
+University of Illinois Urbana-Champaign,Urbana IL,A public land-grant research university,63.3,8,34316,20.1,51196,312,102,https://illinois.edu
+University of Michigan,Ann Arbor MI,A public research university offering outstanding undergraduate education,26.1,9,52266,15.1,47907,315,104,https://umich.edu
+Cornell University,Ithaca NY,A private Ivy League university with a mission to discover preserve and disseminate knowledge,10.7,10,59316,9.0,23620,321,107,https://www.cornell.edu

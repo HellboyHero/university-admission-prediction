@@ -1,0 +1,275 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ user.username }}'s Profile - University Admission Predictor{% endblock %}
+
+{% block extra_css %}
+<style>
+    .profile-container {
+        max-width: 960px;
+        margin: 2rem auto;
+    }
+
+    .profile-header {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+
+    .profile-cover {
+        height: 200px;
+        background: linear-gradient(45deg, var(--primary), var(--info));
+        border-radius: 12px 12px 0 0;
+        margin: -2rem -2rem 0;
+    }
+
+    .profile-avatar {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: 5px solid white;
+        position: absolute;
+        top: 125px;
+        left: 2rem;
+        background: white;
+    }
+
+    .profile-info {
+        margin-left: 180px;
+        padding-top: 1rem;
+    }
+
+    .profile-name {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .profile-username {
+        color: #6c757d;
+        margin-bottom: 1rem;
+    }
+
+    .profile-stats {
+        display: flex;
+        gap: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+    .stat-value {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: var(--primary);
+    }
+
+    .stat-label {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    .profile-body {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 2rem;
+    }
+
+    .profile-section {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .section-title {
+        font-size: 1.25rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .prediction-card {
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .prediction-date {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .prediction-result {
+        font-size: 1.1rem;
+        color: var(--primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .prediction-details {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    .profile-actions {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+    }
+
+    .social-links {
+        margin-top: 1rem;
+    }
+
+    .social-links a {
+        margin-right: 1rem;
+        color: #6c757d;
+        transition: color 0.3s;
+    }
+
+    .social-links a:hover {
+        color: var(--primary);
+    }
+
+    @media (max-width: 768px) {
+        .profile-body {
+            grid-template-columns: 1fr;
+        }
+
+        .profile-info {
+            margin-left: 0;
+            padding-top: 4rem;
+            text-align: center;
+        }
+
+        .profile-avatar {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .profile-stats {
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="profile-cover"></div>
+            <img src="{{ user.userprofile.avatar.url }}" alt="{{ user.username }}" class="profile-avatar">
+            
+            {% if user == request.user %}
+            <div class="profile-actions">
+                <a href="{% url 'edit_profile' %}" class="btn btn-outline-primary">
+                    <i class="fas fa-edit me-2"></i>Edit Profile
+                </a>
+            </div>
+            {% endif %}
+            
+            <div class="profile-info">
+                <h1 class="profile-name">{{ user.get_full_name }}</h1>
+                <p class="profile-username">@{{ user.username }}</p>
+                
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">{{ predictions_count }}</div>
+                        <div class="stat-label">Predictions</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">{{ saved_colleges_count }}</div>
+                        <div class="stat-label">Saved Colleges</div>
+                    </div>
+                </div>
+                
+                <p class="mb-3">{{ user.userprofile.bio }}</p>
+                
+                <div class="d-flex align-items-center mb-2">
+                    <i class="fas fa-map-marker-alt me-2 text-muted"></i>
+                    {{ user.userprofile.location|default:"Location not specified" }}
+                </div>
+                
+                {% if user.userprofile.website %}
+                <div class="d-flex align-items-center mb-2">
+                    <i class="fas fa-globe me-2 text-muted"></i>
+                    <a href="{{ user.userprofile.website }}" target="_blank">{{ user.userprofile.website }}</a>
+                </div>
+                {% endif %}
+                
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter fa-lg"></i></a>
+                    <a href="#"><i class="fab fa-linkedin fa-lg"></i></a>
+                    <a href="#"><i class="fab fa-github fa-lg"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-body">
+            <div class="main-content">
+                <div class="profile-section">
+                    <h2 class="section-title">Recent Predictions</h2>
+                    {% if predictions %}
+                        {% for prediction in predictions %}
+                        <div class="prediction-card">
+                            <div class="prediction-date">
+                                {{ prediction.created_at|date:"F j, Y" }}
+                            </div>
+                            <div class="prediction-result">
+                                {{ prediction.chance_of_admit }}% Chance of Admission
+                            </div>
+                            <div class="prediction-details">
+                                GRE: {{ prediction.gre_score }} | 
+                                TOEFL: {{ prediction.toefl_score }} | 
+                                CGPA: {{ prediction.cgpa }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted">No predictions made yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="profile-section">
+                    <h2 class="section-title">About</h2>
+                    <div class="mb-3">
+                        <h6 class="text-muted mb-2">Interests</h6>
+                        <p>{{ user.userprofile.interests|default:"Not specified" }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <h6 class="text-muted mb-2">Member Since</h6>
+                        <p>{{ user.date_joined|date:"F j, Y" }}</p>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h2 class="section-title">Saved Colleges</h2>
+                    {% if saved_colleges %}
+                        <div class="list-group">
+                            {% for college in saved_colleges %}
+                            <a href="#" class="list-group-item list-group-item-action">
+                                {{ college.name }}
+                                <small class="d-block text-muted">{{ college.location }}</small>
+                            </a>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No colleges saved yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

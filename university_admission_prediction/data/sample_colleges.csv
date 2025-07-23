@@ -1,0 +1,6 @@
+name,location,description,acceptance_rate,ranking,tuition,student_faculty_ratio,total_enrollment,average_gre,average_toefl,website
+Massachusetts Institute of Technology,Cambridge MA,"MIT is a world-renowned science and technology research university.",7.3,1,53790,3:1,11376,328,110,https://www.mit.edu
+Stanford University,Stanford CA,"Stanford University is one of the world's leading research universities.",4.3,2,56169,4:1,17249,324,108,https://www.stanford.edu
+Harvard University,Cambridge MA,"Harvard is the oldest institution of higher education in the United States.",4.6,3,54768,6:1,21015,325,109,https://www.harvard.edu
+California Institute of Technology,Pasadena CA,"Caltech is a world-renowned science and engineering institute.",6.4,4,54600,3:1,2237,332,112,https://www.caltech.edu
+Carnegie Mellon University,Pittsburgh PA,"CMU is a global research university recognized for its world-class arts and technology programs.",15.4,5,57560,5:1,14799,322,108,https://www.cmu.edu

@@ -1,0 +1,208 @@
+{% extends 'predictor/auth/base_auth.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Sign In - University Admission Predictor{% endblock %}
+
+{% block auth_title %}Welcome Back!{% endblock %}
+{% block auth_subtitle %}Sign in to access your account{% endblock %}
+
+{% block extra_css %}
+<style>
+    .auth-container {
+        max-width: 480px;
+        margin: 2rem auto;
+    }
+
+    .auth-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+    }
+
+    .auth-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .auth-icon {
+        font-size: 3rem;
+        color: var(--primary);
+        margin-bottom: 1rem;
+    }
+
+    .auth-title {
+        color: var(--primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .auth-subtitle {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    .form-floating {
+        margin-bottom: 1.5rem;
+    }
+
+    .password-toggle {
+        z-index: 1;
+    }
+
+    .password-toggle i {
+        font-size: 1.25rem;
+    }
+
+    .auth-links {
+        margin-bottom: 1.5rem;
+    }
+
+    .auth-links a {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .social-login {
+        margin-top: 1.5rem;
+    }
+
+    .social-divider {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .social-divider::before, .social-divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #dee2e6;
+    }
+
+    .social-divider::before {
+        margin-right: 0.5rem;
+    }
+
+    .social-divider::after {
+        margin-left: 0.5rem;
+    }
+
+    .social-btn {
+        width: 100%;
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+        border-radius: 5px;
+        border: 1px solid #dee2e6;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+    .social-btn:hover {
+        background: #f8f9fa;
+    }
+
+    .social-btn i {
+        margin-right: 0.5rem;
+    }
+
+    .auth-footer {
+        text-align: center;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #dee2e6;
+    }
+</style>
+{% endblock %}
+
+{% block auth_content %}
+<form method="post" novalidate>
+    {% csrf_token %}
+    
+    <div class="form-floating mb-3">
+        {{ form.username|as_crispy_field }}
+    </div>
+    
+    <div class="form-floating mb-3">
+        {{ form.password|as_crispy_field }}
+        <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y password-toggle" 
+                data-target="#id_password">
+            <i class="fas fa-eye"></i>
+        </button>
+    </div>
+
+    <div class="form-check mb-3">
+        {{ form.remember_me }}
+        <label class="form-check-label" for="{{ form.remember_me.id_for_label }}">
+            Keep me signed in
+        </label>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">
+        <i class="fas fa-sign-in-alt me-2"></i>Sign In
+    </button>
+
+    <div class="auth-links">
+        <a href="{% url 'password_reset' %}" class="text-primary">
+            Forgot Password?
+        </a>
+        <a href="{% url 'register' %}" class="text-primary">
+            Create Account
+        </a>
+    </div>
+
+    <div class="social-login">
+        <div class="social-divider">
+            <span class="bg-white px-3 text-muted">or continue with</span>
+        </div>
+        
+        <a href="{% url 'social:begin' 'google-oauth2' %}" class="social-btn google">
+            <i class="fab fa-google"></i>
+            Sign in with Google
+        </a>
+        
+        <a href="{% url 'social:begin' 'github' %}" class="social-btn github">
+            <i class="fab fa-github"></i>
+            Sign in with GitHub
+        </a>
+    </div>
+</form>
+
+<div class="auth-footer">
+    <p class="mb-0">Don't have an account? 
+        <a href="{% url 'register' %}" class="text-primary">Sign Up</a>
+    </p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    
+    form.addEventListener('submit', function(e) {
+        const submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Signing In...';
+    });
+
+    const passwordToggle = document.querySelector('.password-toggle');
+    const passwordInput = document.querySelector('#id_password');
+
+    passwordToggle.addEventListener('click', function() {
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            passwordToggle.innerHTML = '<i class="fas fa-eye-slash"></i>';
+        } else {
+            passwordInput.type = 'password';
+            passwordToggle.innerHTML = '<i class="fas fa-eye"></i>';
+        }
+    });
+});
+</script>
+{% endblock %}

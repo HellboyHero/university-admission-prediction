@@ -1,0 +1,261 @@
+from django.core.management.base import BaseCommand
+from predictor.models import College
+
+class Command(BaseCommand):
+    help = 'Adds sample universities to the database'
+
+    def handle(self, *args, **kwargs):
+        universities = [
+            # United States Universities (existing)
+            {
+                'name': 'Massachusetts Institute of Technology',
+                'location': 'Cambridge, MA',
+                'country': 'United States',
+                'description': 'A world-renowned science and technology research university.',
+                'acceptance_rate': 7.3,
+                'ranking': 1,
+                'tuition': 55878,
+                'student_faculty_ratio': 3.1,
+                'total_enrollment': 11520,
+                'average_gre': 328,
+                'average_toefl': 110,
+                'min_gre_score': 320,
+                'min_toefl_score': 100,
+                'min_cgpa': 3.8,
+                'website': 'https://www.mit.edu'
+            },
+            {
+                'name': 'Stanford University',
+                'location': 'Stanford, CA',
+                'country': 'United States',
+                'description': 'One of the world\'s leading research and teaching institutions.',
+                'acceptance_rate': 4.3,
+                'ranking': 2,
+                'tuition': 56169,
+                'student_faculty_ratio': 5.2,
+                'total_enrollment': 17249,
+                'average_gre': 327,
+                'average_toefl': 109,
+                'min_gre_score': 318,
+                'min_toefl_score': 100,
+                'min_cgpa': 3.7,
+                'website': 'https://www.stanford.edu'
+            },
+
+            # United Kingdom Universities (expanded)
+            {
+                'name': 'University of Cambridge',
+                'location': 'Cambridge',
+                'country': 'United Kingdom',
+                'description': 'A collegiate research university with a rich history.',
+                'acceptance_rate': 21.0,
+                'ranking': 3,
+                'tuition': 40000,
+                'student_faculty_ratio': 4.9,
+                'total_enrollment': 23247,
+                'average_gre': 325,
+                'average_toefl': 108,
+                'min_gre_score': 315,
+                'min_toefl_score': 100,
+                'min_cgpa': 3.7,
+                'website': 'https://www.cam.ac.uk'
+            },
+            {
+                'name': 'University of Oxford',
+                'location': 'Oxford',
+                'country': 'United Kingdom',
+                'description': 'The oldest university in the English-speaking world.',
+                'acceptance_rate': 17.5,
+                'ranking': 4,
+                'tuition': 42000,
+                'student_faculty_ratio': 5.1,
+                'total_enrollment': 24500,
+                'average_gre': 326,
+                'average_toefl': 109,
+                'min_gre_score': 316,
+                'min_toefl_score': 100,
+                'min_cgpa': 3.7,
+                'website': 'https://www.ox.ac.uk'
+            },
+            {
+                'name': 'Imperial College London',
+                'location': 'London',
+                'country': 'United Kingdom',
+                'description': 'A world-class university focusing on science, engineering, medicine, and business.',
+                'acceptance_rate': 14.3,
+                'ranking': 8,
+                'tuition': 38000,
+                'student_faculty_ratio': 6.5,
+                'total_enrollment': 19400,
+                'average_gre': 324,
+                'average_toefl': 107,
+                'min_gre_score': 314,
+                'min_toefl_score': 100,
+                'min_cgpa': 3.5,
+                'website': 'https://www.imperial.ac.uk'
+            },
+            {
+                'name': 'University College London',
+                'location': 'London',
+                'country': 'United Kingdom',
+                'description': 'London\'s leading multidisciplinary university.',
+                'acceptance_rate': 23.0,
+                'ranking': 10,
+                'tuition': 37000,
+                'student_faculty_ratio': 7.2,
+                'total_enrollment': 41000,
+                'average_gre': 322,
+                'average_toefl': 106,
+                'min_gre_score': 312,
+                'min_toefl_score': 98,
+                'min_cgpa': 3.4,
+                'website': 'https://www.ucl.ac.uk'
+            },
+
+            # Canadian Universities (expanded)
+            {
+                'name': 'University of Toronto',
+                'location': 'Toronto',
+                'country': 'Canada',
+                'description': 'Canada\'s leading institution of learning, discovery and knowledge creation.',
+                'acceptance_rate': 25.0,
+                'ranking': 18,
+                'tuition': 45000,
+                'student_faculty_ratio': 16.4,
+                'total_enrollment': 93081,
+                'average_gre': 320,
+                'average_toefl': 103,
+                'min_gre_score': 310,
+                'min_toefl_score': 95,
+                'min_cgpa': 3.3,
+                'website': 'https://www.utoronto.ca'
+            },
+            {
+                'name': 'University of British Columbia',
+                'location': 'Vancouver',
+                'country': 'Canada',
+                'description': 'A global centre for teaching, learning and research.',
+                'acceptance_rate': 52.4,
+                'ranking': 34,
+                'tuition': 38000,
+                'student_faculty_ratio': 18.5,
+                'total_enrollment': 66512,
+                'average_gre': 318,
+                'average_toefl': 100,
+                'min_gre_score': 308,
+                'min_toefl_score': 93,
+                'min_cgpa': 3.2,
+                'website': 'https://www.ubc.ca'
+            },
+            {
+                'name': 'McGill University',
+                'location': 'Montreal',
+                'country': 'Canada',
+                'description': 'One of Canada\'s best-known institutions of higher learning.',
+                'acceptance_rate': 46.3,
+                'ranking': 27,
+                'tuition': 40000,
+                'student_faculty_ratio': 16.2,
+                'total_enrollment': 40036,
+                'average_gre': 319,
+                'average_toefl': 102,
+                'min_gre_score': 309,
+                'min_toefl_score': 94,
+                'min_cgpa': 3.2,
+                'website': 'https://www.mcgill.ca'
+            },
+            {
+                'name': 'University of Waterloo',
+                'location': 'Waterloo',
+                'country': 'Canada',
+                'description': 'Canada\'s most innovative university with a focus on technology and engineering.',
+                'acceptance_rate': 53.0,
+                'ranking': 149,
+                'tuition': 36000,
+                'student_faculty_ratio': 20.1,
+                'total_enrollment': 42000,
+                'average_gre': 316,
+                'average_toefl': 98,
+                'min_gre_score': 306,
+                'min_toefl_score': 90,
+                'min_cgpa': 3.0,
+                'website': 'https://uwaterloo.ca'
+            },
+
+            # Singapore Universities (expanded)
+            {
+                'name': 'National University of Singapore',
+                'location': 'Singapore',
+                'country': 'Singapore',
+                'description': 'A leading global university centered in Asia.',
+                'acceptance_rate': 15.0,
+                'ranking': 11,
+                'tuition': 35000,
+                'student_faculty_ratio': 12.0,
+                'total_enrollment': 38596,
+                'average_gre': 323,
+                'average_toefl': 105,
+                'min_gre_score': 312,
+                'min_toefl_score': 96,
+                'min_cgpa': 3.5,
+                'website': 'https://www.nus.edu.sg'
+            },
+            {
+                'name': 'Nanyang Technological University',
+                'location': 'Singapore',
+                'country': 'Singapore',
+                'description': 'A research-intensive public university known for its science and engineering programs.',
+                'acceptance_rate': 26.0,
+                'ranking': 19,
+                'tuition': 33000,
+                'student_faculty_ratio': 14.8,
+                'total_enrollment': 33000,
+                'average_gre': 321,
+                'average_toefl': 103,
+                'min_gre_score': 310,
+                'min_toefl_score': 94,
+                'min_cgpa': 3.3,
+                'website': 'https://www.ntu.edu.sg'
+            },
+            {
+                'name': 'Singapore Management University',
+                'location': 'Singapore',
+                'country': 'Singapore',
+                'description': 'A premier university in Asia for business and management education.',
+                'acceptance_rate': 35.0,
+                'ranking': 511,
+                'tuition': 30000,
+                'student_faculty_ratio': 15.3,
+                'total_enrollment': 10000,
+                'average_gre': 318,
+                'average_toefl': 100,
+                'min_gre_score': 308,
+                'min_toefl_score': 92,
+                'min_cgpa': 3.2,
+                'website': 'https://www.smu.edu.sg'
+            },
+            {
+                'name': 'Singapore University of Technology and Design',
+                'location': 'Singapore',
+                'country': 'Singapore',
+                'description': 'A specialized university focusing on technology, design, and innovation.',
+                'acceptance_rate': 38.0,
+                'ranking': 701,
+                'tuition': 28000,
+                'student_faculty_ratio': 11.5,
+                'total_enrollment': 3000,
+                'average_gre': 316,
+                'average_toefl': 98,
+                'min_gre_score': 306,
+                'min_toefl_score': 90,
+                'min_cgpa': 3.0,
+                'website': 'https://www.sutd.edu.sg'
+            }
+        ]
+
+        for uni_data in universities:
+            College.objects.get_or_create(
+                name=uni_data['name'],
+                defaults=uni_data
+            )
+            self.stdout.write(self.style.SUCCESS(f'Successfully added {uni_data["name"]}')) 

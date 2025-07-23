@@ -1,0 +1,399 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+
+{% block title %}{{ college.name }} - University Details{% endblock %}
+
+{% block extra_css %}
+<style>
+    .college-header {
+        background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        color: white;
+        padding: 4rem 0;
+        margin-bottom: 3rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .college-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('{% static "predictor/images/pattern.png" %}') repeat;
+        opacity: 0.1;
+    }
+
+    .college-name {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .college-meta {
+        font-size: 1.2rem;
+        opacity: 0.9;
+    }
+
+    .stats-card {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        height: 100%;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .stats-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .stat-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+        border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .stat-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .stat-label {
+        color: #6c757d;
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .stat-value {
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 1.1rem;
+    }
+
+    .admission-chance {
+        text-align: center;
+        padding: 2rem;
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        margin-top: 1rem;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .chance-number {
+        font-size: 4rem;
+        font-weight: 800;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        line-height: 1;
+        margin-bottom: 0.5rem;
+    }
+
+    .chance-label {
+        font-size: 1.2rem;
+        color: rgba(255,255,255,0.9);
+    }
+
+    .description-card {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+
+    .section-title {
+        color: #2c3e50;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+    }
+
+    .btn-save {
+        border-radius: 12px;
+        padding: 1rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-save:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .btn-website {
+        border-radius: 12px;
+        padding: 1rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-website:hover {
+        background-color: #3498db;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .profile-card {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+
+    .requirement-value {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #2c3e50;
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .requirement-label {
+        text-align: center;
+        color: #6c757d;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    /* Tips Section Styles */
+    .tips-list .tip-item {
+        padding: 1rem;
+        border-radius: 12px;
+        background: #f8f9fa;
+        transition: all 0.3s ease;
+    }
+
+    .tips-list .tip-item:hover {
+        background: #fff;
+        transform: translateX(5px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .tips-list h5 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .tips-list p {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    .tips-list i {
+        font-size: 1.2rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- College Header -->
+<div class="college-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="college-name">{{ college.name }}</h1>
+                <p class="college-meta mb-0">
+                    <i class="fas fa-map-marker-alt me-2"></i>{{ college.location }}
+                    <span class="mx-3">|</span>
+                    <i class="fas fa-trophy me-2"></i>Rank #{{ college.ranking }}
+                    <span class="mx-3">|</span>
+                    <i class="fas fa-graduation-cap me-2"></i>{{ college.acceptance_rate }}% Acceptance Rate
+                </p>
+            </div>
+            <div class="col-md-4">
+                {% if admission_chance %}
+                <div class="admission-chance">
+                    <div class="chance-number">{{ admission_chance }}%</div>
+                    <p class="chance-label mb-0">Admission Probability</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- About Section -->
+            <div class="description-card">
+                <h3 class="section-title">About {{ college.name }}</h3>
+                <p class="lead mb-0">{{ college.description }}</p>
+            </div>
+
+            <!-- Key Statistics -->
+            <div class="stats-card mb-4">
+                <h3 class="section-title">University Statistics</h3>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="stat-item">
+                            <span class="stat-label">
+                                <i class="fas fa-chart-pie me-2"></i>Acceptance Rate
+                            </span>
+                            <span class="stat-value">{{ college.acceptance_rate }}%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">
+                                <i class="fas fa-users me-2"></i>Student-Faculty Ratio
+                            </span>
+                            <span class="stat-value">{{ college.student_faculty_ratio }}:1</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">
+                                <i class="fas fa-user-graduate me-2"></i>Total Enrollment
+                            </span>
+                            <span class="stat-value">{{ college.total_enrollment|default:"N/A" }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="stat-item">
+                            <span class="stat-label">
+                                <i class="fas fa-brain me-2"></i>Average GRE
+                            </span>
+                            <span class="stat-value">{{ college.average_gre }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">
+                                <i class="fas fa-language me-2"></i>Average TOEFL
+                            </span>
+                            <span class="stat-value">{{ college.average_toefl }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">
+                                <i class="fas fa-dollar-sign me-2"></i>Annual Tuition
+                            </span>
+                            <span class="stat-value">${{ college.tuition|floatformat:0|default:"N/A" }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Minimum Requirements -->
+            <div class="stats-card">
+                <h3 class="section-title">Admission Requirements</h3>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="text-center mb-4">
+                            <div class="requirement-value">{{ college.min_gre_score }}</div>
+                            <div class="requirement-label">Minimum GRE Score</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center mb-4">
+                            <div class="requirement-value">{{ college.min_toefl_score }}</div>
+                            <div class="requirement-label">Minimum TOEFL Score</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center mb-4">
+                            <div class="requirement-value">{{ college.min_cgpa }}</div>
+                            <div class="requirement-label">Minimum CGPA</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tips for Accurate Prediction -->
+            <div class="stats-card mt-4">
+                <h3 class="section-title">
+                    <i class="fas fa-lightbulb me-2 text-warning"></i>Tips for Accurate Prediction
+                </h3>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="tips-list">
+                            <div class="tip-item mb-3">
+                                <h5 class="mb-2">
+                                    <i class="fas fa-check-circle text-success me-2"></i>Ensure Accurate Scores
+                                </h5>
+                                <p class="text-muted mb-0">Double-check your GRE, TOEFL, and CGPA scores. Even small differences can affect your prediction accuracy.</p>
+                            </div>
+                            <div class="tip-item mb-3">
+                                <h5 class="mb-2">
+                                    <i class="fas fa-star text-warning me-2"></i>Consider All Factors
+                                </h5>
+                                <p class="text-muted mb-0">Research experience, publications, and internships can significantly impact your admission chances.</p>
+                            </div>
+                            <div class="tip-item mb-3">
+                                <h5 class="mb-2">
+                                    <i class="fas fa-bullseye text-primary me-2"></i>Target Strategically
+                                </h5>
+                                <p class="text-muted mb-0">Compare your scores with the university's average and minimum requirements for better assessment.</p>
+                            </div>
+                            <div class="tip-item">
+                                <h5 class="mb-2">
+                                    <i class="fas fa-clock text-info me-2"></i>Stay Updated
+                                </h5>
+                                <p class="text-muted mb-0">Keep your profile current and check predictions regularly as you improve your scores or gain experience.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Actions Card -->
+            <div class="stats-card mb-4">
+                <form method="post" action="{% url 'toggle_save_college' college.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-save {% if is_saved %}btn-danger{% else %}btn-primary{% endif %} w-100 mb-3">
+                        <i class="fas {% if is_saved %}fa-heart-broken{% else %}fa-heart{% endif %} me-2"></i>
+                        {% if is_saved %}Remove from Saved{% else %}Save University{% endif %}
+                    </button>
+                </form>
+                {% if college.website %}
+                <a href="{{ college.website }}" target="_blank" class="btn btn-website btn-outline-primary w-100">
+                    <i class="fas fa-external-link-alt me-2"></i>Visit Official Website
+                </a>
+                {% endif %}
+            </div>
+
+            <!-- Your Profile Card -->
+            {% if latest_prediction %}
+            <div class="stats-card profile-card">
+                <h4 class="section-title">Your Profile</h4>
+                <div class="stat-item">
+                    <span class="stat-label">
+                        <i class="fas fa-brain me-2"></i>GRE Score
+                    </span>
+                    <span class="stat-value">{{ latest_prediction.gre_score }}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">
+                        <i class="fas fa-language me-2"></i>TOEFL Score
+                    </span>
+                    <span class="stat-value">{{ latest_prediction.toefl_score }}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">
+                        <i class="fas fa-graduation-cap me-2"></i>CGPA
+                    </span>
+                    <span class="stat-value">{{ latest_prediction.cgpa }}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">
+                        <i class="fas fa-flask me-2"></i>Research Experience
+                    </span>
+                    <span class="stat-value">{{ latest_prediction.research_experience|yesno:"Yes,No" }}</span>
+                </div>
+            </div>
+            {% else %}
+            <div class="stats-card text-center">
+                <h4 class="section-title">Check Your Chances</h4>
+                <p class="text-muted mb-4">Make a prediction to see your admission chances for {{ college.name }}.</p>
+                <a href="{% url 'predict' %}" class="btn btn-primary btn-save w-100">
+                    <i class="fas fa-calculator me-2"></i>Make Prediction
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

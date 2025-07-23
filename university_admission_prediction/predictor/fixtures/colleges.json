@@ -1,0 +1,182 @@
+[
+    {
+        "model": "predictor.college",
+        "pk": 1,
+        "fields": {
+            "name": "Massachusetts Institute of Technology",
+            "location": "Cambridge, MA, USA",
+            "description": "MIT is a world-renowned science and technology research university known for its rigorous academic programs.",
+            "acceptance_rate": 7.3,
+            "min_gre_score": 320,
+            "min_toefl_score": 100,
+            "min_cgpa": 8.5,
+            "ranking": 1,
+            "website": "https://www.mit.edu",
+            "courses_offered": "Computer Science, Engineering, Mathematics, Physics",
+            "tuition_fee": 55000.00,
+            "application_deadline": "2025-12-15"
+        }
+    },
+    {
+        "model": "predictor.college",
+        "pk": 2,
+        "fields": {
+            "name": "Stanford University",
+            "location": "Stanford, CA, USA",
+            "description": "Stanford University is one of the world's leading research universities, known for its entrepreneurial spirit.",
+            "acceptance_rate": 5.2,
+            "min_gre_score": 325,
+            "min_toefl_score": 100,
+            "min_cgpa": 8.5,
+            "ranking": 2,
+            "website": "https://www.stanford.edu",
+            "courses_offered": "Computer Science, Business, Engineering, Medicine",
+            "tuition_fee": 56000.00,
+            "application_deadline": "2025-12-01"
+        }
+    },
+    {
+        "model": "predictor.college",
+        "pk": 3,
+        "fields": {
+            "name": "University of California, Berkeley",
+            "location": "Berkeley, CA, USA",
+            "description": "UC Berkeley is a top-ranked public research university and a wellspring of innovation.",
+            "acceptance_rate": 17.5,
+            "min_gre_score": 315,
+            "min_toefl_score": 90,
+            "min_cgpa": 8.0,
+            "ranking": 3,
+            "website": "https://www.berkeley.edu",
+            "courses_offered": "Computer Science, Engineering, Business, Arts",
+            "tuition_fee": 45000.00,
+            "application_deadline": "2025-11-30"
+        }
+    },
+    {
+        "model": "predictor.college",
+        "pk": 4,
+        "fields": {
+            "name": "Georgia Institute of Technology",
+            "location": "Atlanta, GA, USA",
+            "description": "Georgia Tech is a leading technology-focused university known for its engineering programs.",
+            "acceptance_rate": 21.3,
+            "min_gre_score": 310,
+            "min_toefl_score": 90,
+            "min_cgpa": 7.5,
+            "ranking": 4,
+            "website": "https://www.gatech.edu",
+            "courses_offered": "Engineering, Computing, Sciences",
+            "tuition_fee": 42000.00,
+            "application_deadline": "2025-12-15"
+        }
+    },
+    {
+        "model": "predictor.college",
+        "pk": 5,
+        "fields": {
+            "name": "Carnegie Mellon University",
+            "location": "Pittsburgh, PA, USA",
+            "description": "CMU is a global research university known for its world-class computer science and robotics programs.",
+            "acceptance_rate": 15.4,
+            "min_gre_score": 318,
+            "min_toefl_score": 95,
+            "min_cgpa": 8.0,
+            "ranking": 5,
+            "website": "https://www.cmu.edu",
+            "courses_offered": "Computer Science, Robotics, Engineering, Arts",
+            "tuition_fee": 53000.00,
+            "application_deadline": "2025-12-10"
+        }
+    },
+    {
+        "model": "predictor.college",
+        "pk": 6,
+        "fields": {
+            "name": "University of Michigan",
+            "location": "Ann Arbor, MI, USA",
+            "description": "UMich is a top public university known for its research output and diverse academic programs.",
+            "acceptance_rate": 26.1,
+            "min_gre_score": 305,
+            "min_toefl_score": 88,
+            "min_cgpa": 7.0,
+            "ranking": 6,
+            "website": "https://www.umich.edu",
+            "courses_offered": "Engineering, Business, Arts, Sciences",
+            "tuition_fee": 48000.00,
+            "application_deadline": "2025-11-15"
+        }
+    },
+    {
+        "model": "predictor.college",
+        "pk": 7,
+        "fields": {
+            "name": "University of Illinois Urbana-Champaign",
+            "location": "Champaign, IL, USA",
+            "description": "UIUC is known for its engineering and computer science programs.",
+            "acceptance_rate": 28.5,
+            "min_gre_score": 300,
+            "min_toefl_score": 85,
+            "min_cgpa": 7.0,
+            "ranking": 7,
+            "website": "https://www.illinois.edu",
+            "courses_offered": "Computer Science, Engineering, Business",
+            "tuition_fee": 44000.00,
+            "application_deadline": "2025-12-01"
+        }
+    },
+    {
+        "model": "predictor.college",
+        "pk": 8,
+        "fields": {
+            "name": "University of Washington",
+            "location": "Seattle, WA, USA",
+            "description": "UW is a leading public university known for its research and innovation.",
+            "acceptance_rate": 32.0,
+            "min_gre_score": 300,
+            "min_toefl_score": 85,
+            "min_cgpa": 7.0,
+            "ranking": 8,
+            "website": "https://www.washington.edu",
+            "courses_offered": "Computer Science, Engineering, Medicine",
+            "tuition_fee": 41000.00,
+            "application_deadline": "2025-11-30"
+        }
+    },
+    {
+        "model": "predictor.college",
+        "pk": 9,
+        "fields": {
+            "name": "University of Texas at Austin",
+            "location": "Austin, TX, USA",
+            "description": "UT Austin is known for its strong engineering and computer science programs.",
+            "acceptance_rate": 31.8,
+            "min_gre_score": 295,
+            "min_toefl_score": 83,
+            "min_cgpa": 7.0,
+            "ranking": 9,
+            "website": "https://www.utexas.edu",
+            "courses_offered": "Engineering, Business, Arts, Sciences",
+            "tuition_fee": 40000.00,
+            "application_deadline": "2025-12-15"
+        }
+    },
+    {
+        "model": "predictor.college",
+        "pk": 10,
+        "fields": {
+            "name": "Purdue University",
+            "location": "West Lafayette, IN, USA",
+            "description": "Purdue is known for its engineering programs and innovative research.",
+            "acceptance_rate": 35.0,
+            "min_gre_score": 295,
+            "min_toefl_score": 80,
+            "min_cgpa": 7.0,
+            "ranking": 10,
+            "website": "https://www.purdue.edu",
+            "courses_offered": "Engineering, Technology, Sciences",
+            "tuition_fee": 38000.00,
+            "application_deadline": "2025-11-15"
+        }
+    }
+]

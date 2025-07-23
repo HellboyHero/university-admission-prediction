@@ -1,0 +1,240 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Predict Your Admission Chances - University Admission Predictor{% endblock %}
+
+{% block extra_css %}
+<style>
+    .prediction-form {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .form-section {
+        margin-bottom: 2rem;
+    }
+
+    .form-section-title {
+        color: var(--primary);
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--primary);
+    }
+
+    .help-text {
+        font-size: 0.875rem;
+        color: #6c757d;
+        margin-top: 0.25rem;
+    }
+
+    .score-input {
+        max-width: 200px;
+    }
+
+    .rating-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .rating-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+
+    .form-range {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .range-value {
+        font-weight: bold;
+        color: var(--primary);
+    }
+
+    .submit-btn {
+        min-width: 200px;
+    }
+
+    .info-card {
+        background: linear-gradient(135deg, var(--primary) 0%, #34495E 100%);
+        color: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        height: 100%;
+    }
+
+    .info-icon {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .research-options {
+        display: flex;
+        gap: 2rem;
+        margin-top: 1rem;
+    }
+
+    .research-option {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .research-option input[type="radio"] {
+        width: 1.2em;
+        height: 1.2em;
+    }
+
+    .research-option label {
+        margin-bottom: 0;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+
+    .research-help {
+        color: #6c757d;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="prediction-form">
+                <h2 class="mb-4">Predict Your Admission Chances</h2>
+                
+                <form method="post" id="predictionForm" novalidate>
+                    {% csrf_token %}
+                    
+                    <!-- Academic Scores Section -->
+                    <div class="form-section">
+                        <h4 class="form-section-title">Academic Scores</h4>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                {{ form.gre_score|as_crispy_field }}
+                                <div class="help-text">
+                                    <i class="fas fa-info-circle"></i> 
+                                    Typical range: 290-340
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.toefl_score|as_crispy_field }}
+                                <div class="help-text">
+                                    <i class="fas fa-info-circle"></i> 
+                                    Typical range: 80-120
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.cgpa|as_crispy_field }}
+                                <div class="help-text">
+                                    <i class="fas fa-info-circle"></i> 
+                                    On a scale of 0-4.0
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Research Experience -->
+                    <div class="form-section">
+                        <h4 class="form-section-title">Research Experience</h4>
+                        <p class="research-help">Do you have research experience (publications, projects, etc.)?</p>
+                        <div class="research-options">
+                            {% for value, text in form.research_experience.field.choices %}
+                            <div class="research-option">
+                                <input type="radio" name="{{ form.research_experience.name }}" 
+                                       value="{{ value }}" 
+                                       id="id_research_{{ forloop.counter }}"
+                                       {% if form.research_experience.value == value|stringformat:"s" %}checked{% endif %}>
+                                <label for="id_research_{{ forloop.counter }}">{{ text }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Application Strength -->
+                    <div class="form-section">
+                        <h4 class="form-section-title">Application Strength</h4>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                {{ form.sop|as_crispy_field }}
+                                <div class="help-text">
+                                    <i class="fas fa-info-circle"></i> 
+                                    Rate the strength of your Statement of Purpose
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.lor|as_crispy_field }}
+                                <div class="help-text">
+                                    <i class="fas fa-info-circle"></i> 
+                                    Rate the strength of your Letters of Recommendation
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg submit-btn">
+                            <i class="fas fa-calculator me-2"></i>Calculate My Chances
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-4 mt-4 mt-lg-0">
+            <!-- Tips Card -->
+            <div class="info-card">
+                <div class="info-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <h5>Tips for Accurate Prediction</h5>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-3">
+                        <i class="fas fa-check-circle me-2"></i>
+                        Enter exact scores from official tests
+                    </li>
+                    <li class="mb-3">
+                        <i class="fas fa-check-circle me-2"></i>
+                        Be honest about your research experience
+                    </li>
+                    <li class="mb-3">
+                        <i class="fas fa-star me-2"></i>
+                        Rate your SOP and LOR objectively
+                    </li>
+                    <li class="mb-3">
+                        <i class="fas fa-graduation-cap me-2"></i>
+                        Include all relevant research experience
+                    </li>
+                    <li>
+                        <i class="fas fa-sync me-2"></i>
+                        Update your profile as scores improve
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('predictionForm');
+    
+    form.addEventListener('submit', function(e) {
+        const submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Calculating...';
+    });
+});
+</script>
+{% endblock %}

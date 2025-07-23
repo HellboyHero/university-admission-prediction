@@ -1,0 +1,226 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .auth-page {
+        min-height: calc(100vh - 72px);
+        display: flex;
+        align-items: center;
+        background: linear-gradient(135deg, var(--bs-primary) 0%, var(--bs-info) 100%);
+    }
+
+    .auth-container {
+        width: 100%;
+        max-width: 420px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    .auth-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        padding: 2rem;
+    }
+
+    .auth-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .auth-logo {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 1.5rem;
+    }
+
+    .auth-title {
+        font-size: 1.75rem;
+        color: var(--bs-primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .auth-subtitle {
+        color: #6c757d;
+        font-size: 0.95rem;
+    }
+
+    .form-floating {
+        margin-bottom: 1rem;
+    }
+
+    .form-floating > label {
+        padding-left: 1rem;
+    }
+
+    .form-floating > .form-control {
+        padding-left: 1rem;
+    }
+
+    .form-control:focus {
+        border-color: var(--bs-primary);
+        box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+    }
+
+    .auth-footer {
+        text-align: center;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #dee2e6;
+    }
+
+    .social-login {
+        margin: 1.5rem 0;
+    }
+
+    .social-divider {
+        text-align: center;
+        position: relative;
+        margin: 1.5rem 0;
+    }
+
+    .social-divider::before,
+    .social-divider::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        width: calc(50% - 30px);
+        height: 1px;
+        background: #dee2e6;
+    }
+
+    .social-divider::before {
+        left: 0;
+    }
+
+    .social-divider::after {
+        right: 0;
+    }
+
+    .social-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        background: white;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+
+    .social-btn:hover {
+        background: #f8f9fa;
+        transform: translateY(-1px);
+    }
+
+    .social-btn i {
+        font-size: 1.25rem;
+        margin-right: 0.75rem;
+    }
+
+    .social-btn.google i {
+        color: #ea4335;
+    }
+
+    .social-btn.github i {
+        color: #24292e;
+    }
+
+    .error-feedback {
+        width: 100%;
+        margin-top: 0.25rem;
+        font-size: 0.875rem;
+        color: var(--bs-danger);
+    }
+
+    .auth-links {
+        display: flex;
+        justify-content: space-between;
+        margin: 1rem 0;
+        font-size: 0.9rem;
+    }
+
+    @media (max-width: 576px) {
+        .auth-container {
+            margin: 1rem auto;
+        }
+
+        .auth-card {
+            padding: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <img src="{% static 'predictor/images/logo.png' %}" alt="Logo" class="auth-logo">
+                <h1 class="auth-title">{% block auth_title %}{% endblock %}</h1>
+                <p class="auth-subtitle">{% block auth_subtitle %}{% endblock %}</p>
+            </div>
+
+            {% if messages %}
+            <div class="messages mb-4">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% block auth_content %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle form submission loading state
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+        form.addEventListener('submit', function() {
+            const submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Please wait...';
+                
+                // Reset button after 10 seconds if form hasn't redirected
+                setTimeout(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                }, 10000);
+            }
+        });
+    });
+
+    // Password visibility toggle
+    const toggleBtns = document.querySelectorAll('.password-toggle');
+    toggleBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const input = document.querySelector(this.dataset.target);
+            const icon = this.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

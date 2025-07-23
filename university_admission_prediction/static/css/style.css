@@ -1,0 +1,208 @@
+:root {
+    /* Premium Color Palette */
+    --primary: #2C3E50;      /* Deep blue-gray */
+    --secondary: #E74C3C;    /* Coral red */
+    --accent: #F1C40F;       /* Golden yellow */
+    --neutral: #ECF0F1;      /* Light gray */
+    --dark: #2C3E50;         /* Dark blue-gray */
+    --light: #FFFFFF;        /* White */
+    --success: #27AE60;      /* Emerald green */
+    --info: #3498DB;         /* Sky blue */
+    --warning: #F39C12;      /* Orange */
+    --danger: #C0392B;       /* Dark red */
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #F8FAFC;
+    color: var(--dark);
+    line-height: 1.6;
+}
+
+/* Premium Navigation */
+.navbar {
+    background-color: var(--primary);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    color: var(--light) !important;
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    color: var(--neutral) !important;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: var(--accent) !important;
+}
+
+/* Premium Cards */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-header {
+    background-color: var(--primary);
+    color: var(--light);
+    border-radius: 12px 12px 0 0 !important;
+    padding: 1.5rem;
+}
+
+/* Premium Forms */
+.form-control {
+    border-radius: 8px;
+    border: 2px solid #E2E8F0;
+    padding: 0.75rem 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: none;
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--primary);
+}
+
+/* Premium Buttons */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-primary:hover {
+    background-color: #34495E;
+    border-color: #34495E;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: var(--secondary);
+    border-color: var(--secondary);
+}
+
+/* Premium Progress Bars */
+.progress {
+    height: 1rem;
+    border-radius: 8px;
+    background-color: #E2E8F0;
+}
+
+.progress-bar {
+    background-color: var(--primary);
+    border-radius: 8px;
+}
+
+/* Premium Badges */
+.badge {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.badge-primary {
+    background-color: var(--primary);
+}
+
+.badge-success {
+    background-color: var(--success);
+}
+
+/* Premium Tables */
+.table {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.table thead th {
+    background-color: var(--primary);
+    color: var(--light);
+    font-weight: 600;
+    border: none;
+}
+
+/* Premium Alerts */
+.alert {
+    border: none;
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+}
+
+.alert-success {
+    background-color: #D1F2E4;
+    color: var(--success);
+}
+
+.alert-danger {
+    background-color: #FADADD;
+    color: var(--danger);
+}
+
+/* Premium Charts Container */
+.chart-container {
+    background-color: var(--light);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Premium Prediction Result */
+.prediction-result {
+    text-align: center;
+    padding: 2rem;
+}
+
+.prediction-score {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.college-card {
+    margin-bottom: 1.5rem;
+}
+
+.college-card img {
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px 12px 0 0;
+}
+
+/* Premium Loading Spinner */
+.spinner-border {
+    color: var(--primary);
+    width: 3rem;
+    height: 3rem;
+}
+
+/* Premium Tooltips */
+.tooltip {
+    font-size: 0.875rem;
+}
+
+.tooltip-inner {
+    background-color: var(--dark);
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+}

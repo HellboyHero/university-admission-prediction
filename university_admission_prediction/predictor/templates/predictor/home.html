@@ -1,0 +1,213 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+
+{% block title %}Home - University Admission Predictor{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, var(--primary) 0%, #34495E 100%);
+        color: white;
+        padding: 5rem 0;
+        margin-top: -1.5rem;
+        clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+    }
+
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.25rem;
+        opacity: 0.9;
+        margin-bottom: 2rem;
+    }
+
+    .feature-card {
+        border: none;
+        border-radius: 12px;
+        background: white;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+    }
+
+    .feature-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, var(--primary) 0%, #34495E 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        color: white;
+        font-size: 2rem;
+    }
+
+    .stats-section {
+        background-color: var(--neutral);
+        padding: 4rem 0;
+    }
+
+    .stat-card {
+        text-align: center;
+        padding: 2rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .cta-section {
+        background: linear-gradient(135deg, var(--secondary) 0%, var(--danger) 100%);
+        color: white;
+        padding: 4rem 0;
+        text-align: center;
+    }
+
+    .testimonial-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        margin: 1rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .testimonial-avatar {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        margin-bottom: 1rem;
+    }
+
+    .testimonial-quote {
+        font-style: italic;
+        color: #666;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="hero-title">Predict Your Graduate School Success</h1>
+                <p class="hero-subtitle">
+                    Use AI-powered predictions to find your perfect university match and maximize your admission chances
+                </p>
+                <div class="d-flex gap-3">
+                    <a href="{% url 'predict' %}" class="btn btn-light btn-lg">
+                        <i class="fas fa-chart-line me-2"></i>Get Your Prediction
+                    </a>
+                    <a href="{% url 'college_list' %}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-university me-2"></i>Explore Universities
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="{% static 'images/hero-illustration.svg' %}" alt="Admission Prediction" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card p-4">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="text-center mb-3">AI-Powered Predictions</h3>
+                    <p class="text-muted text-center mb-0">
+                        Get accurate admission predictions using advanced machine learning algorithms and Google Vertex AI
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card p-4">
+                    <div class="feature-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <h3 class="text-center mb-3">Smart University Matching</h3>
+                    <p class="text-muted text-center mb-0">
+                        Find universities that perfectly match your academic profile and career aspirations
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card p-4">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3 class="text-center mb-3">Detailed Analytics</h3>
+                    <p class="text-muted text-center mb-0">
+                        Get comprehensive insights about your admission chances with detailed score analysis
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number">95%</div>
+                    <div class="text-muted">Prediction Accuracy</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number">1000+</div>
+                    <div class="text-muted">Universities</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number">50K+</div>
+                    <div class="text-muted">Predictions Made</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number">98%</div>
+                    <div class="text-muted">User Satisfaction</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <h2 class="mb-4">Ready to Start Your Journey?</h2>
+        <p class="lead mb-4">Get your personalized admission prediction in minutes</p>
+        <a href="{% url 'predict' %}" class="btn btn-light btn-lg">
+            <i class="fas fa-graduation-cap me-2"></i>Start Now
+        </a>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,350 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Prediction Results - Admission Predictor{% endblock %}
+
+{% block extra_css %}
+<style>
+    .result-card {
+        background: linear-gradient(135deg, var(--primary) 0%, #34495E 100%);
+        color: white;
+        border-radius: 12px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .chance-circle {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        margin: 2rem auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        border: 8px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .chance-number {
+        font-size: 3rem;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    .chance-label {
+        font-size: 1rem;
+        opacity: 0.8;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .stat-item {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 1rem;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        opacity: 0.8;
+    }
+
+    .college-card {
+        height: 100%;
+        transition: transform 0.3s ease;
+        position: relative;
+    }
+
+    .college-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .college-header {
+        background: linear-gradient(135deg, var(--primary) 0%, #34495E 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .acceptance-badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .chart-container {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        position: relative;
+        height: 400px;
+        width: 100%;
+    }
+
+    .requirements-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .requirements-list li {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .requirements-list li:last-child {
+        border-bottom: none;
+    }
+
+    .requirement-label {
+        display: flex;
+        align-items: center;
+        color: #6c757d;
+    }
+
+    .requirement-value {
+        font-weight: 600;
+        color: #2c3e50;
+        display: flex;
+        align-items: center;
+    }
+
+    .requirement-value.met {
+        color: #2ecc71;
+    }
+
+    .requirement-value.not-met {
+        color: #e74c3c;
+    }
+
+    .college-rank {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        background: rgba(52, 152, 219, 0.1);
+        color: #3498db;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-left: 1rem;
+    }
+
+    .college-stats {
+        display: flex;
+        gap: 1.5rem;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 0 0 12px 12px;
+    }
+
+    .compare-scores {
+        font-size: 0.8rem;
+        margin-left: 0.5rem;
+        color: #6c757d;
+    }
+
+    .college-card.best-match {
+        border: 3px solid #2ecc71;
+        box-shadow: 0 8px 16px rgba(46, 204, 113, 0.2);
+    }
+
+    .college-card.best-match .college-header {
+        background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+    }
+
+    .best-match-badge {
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #2ecc71;
+        color: white;
+        padding: 0.5rem 1.5rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        box-shadow: 0 4px 8px rgba(46, 204, 113, 0.3);
+        z-index: 1;
+    }
+
+    .best-match-card {
+        border: 3px solid #2ecc71;
+        box-shadow: 0 8px 20px rgba(46, 204, 113, 0.2);
+        transform: scale(1.02);
+    }
+
+    .best-match-header {
+        background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%) !important;
+    }
+
+    .best-match-chance {
+        background: rgba(46, 204, 113, 0.1);
+        border: 2px solid #2ecc71;
+        padding: 1rem;
+        border-radius: 12px;
+    }
+
+    .admission-chance-circle {
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-top: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- Your Profile Card -->
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Your Profile</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <i class="fas fa-graduation-cap me-2"></i>
+                            <strong>GRE Score:</strong> {{ prediction.gre_score }}
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-language me-2"></i>
+                            <strong>TOEFL Score:</strong> {{ prediction.toefl_score }}
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-chart-line me-2"></i>
+                            <strong>CGPA:</strong> {{ prediction.cgpa }}
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-flask me-2"></i>
+                            <strong>Research Experience:</strong>
+                            {% if prediction.research_experience %}
+                                <span class="text-success">Yes</span>
+                            {% else %}
+                                <span class="text-danger">No</span>
+                            {% endif %}
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-file-alt me-2"></i>
+                            <strong>SOP Rating:</strong> {{ prediction.sop }}/5
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-envelope me-2"></i>
+                            <strong>LOR Rating:</strong> {{ prediction.lor }}/5
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommended Universities -->
+        <div class="col-lg-8">
+            <h3 class="mb-4">Recommended Universities</h3>
+            {% if recommended_colleges %}
+                {% for prediction in recommended_colleges %}
+                <div class="card shadow-sm mb-4 {% if forloop.first %}best-match-card{% endif %}">
+                    {% if forloop.first %}
+                    <div class="best-match-badge">
+                        <i class="fas fa-star me-1"></i>Best Match
+                    </div>
+                    {% endif %}
+                    <div class="card-header bg-white {% if forloop.first %}best-match-header text-white{% endif %}">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0">{{ prediction.college.name }}</h4>
+                            <span class="badge {% if forloop.first %}bg-white text-success{% else %}bg-primary{% endif %}">#{{ prediction.college.ranking }}</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <p class="text-muted mb-3">{{ prediction.college.description }}</p>
+                                <div class="mb-3">
+                                    <h5>Requirements:</h5>
+                                    <ul class="list-unstyled">
+                                        <li class="mb-2">
+                                            <i class="fas fa-check-circle {% if prediction.college.min_gre_score <= prediction.gre_score %}text-success{% else %}text-danger{% endif %} me-2"></i>
+                                            Min. GRE Score: {{ prediction.college.min_gre_score }}
+                                            {% if prediction.college.min_gre_score <= prediction.gre_score %}
+                                            <small class="text-success ms-2">(You meet this requirement)</small>
+                                            {% endif %}
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="fas fa-check-circle {% if prediction.college.min_toefl_score <= prediction.toefl_score %}text-success{% else %}text-danger{% endif %} me-2"></i>
+                                            Min. TOEFL Score: {{ prediction.college.min_toefl_score }}
+                                            {% if prediction.college.min_toefl_score <= prediction.toefl_score %}
+                                            <small class="text-success ms-2">(You meet this requirement)</small>
+                                            {% endif %}
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="fas fa-check-circle {% if prediction.college.min_cgpa <= prediction.cgpa %}text-success{% else %}text-danger{% endif %} me-2"></i>
+                                            Min. CGPA: {{ prediction.college.min_cgpa }}
+                                            {% if prediction.college.min_cgpa <= prediction.cgpa %}
+                                            <small class="text-success ms-2">(You meet this requirement)</small>
+                                            {% endif %}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="admission-chance-circle {% if forloop.first %}best-match-chance{% endif %}">
+                                    <h5>Admission Chance</h5>
+                                    <div class="display-4 fw-bold {% if prediction.chance >= 70 %}text-success{% elif prediction.chance >= 40 %}text-warning{% else %}text-danger{% endif %}">
+                                        {{ prediction.chance }}%
+                                    </div>
+                                    {% if forloop.first %}
+                                    <div class="mt-2 text-success">
+                                        <i class="fas fa-check-circle"></i> Best Match for Your Profile
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-info me-2">
+                                    <i class="fas fa-percentage me-1"></i>{{ prediction.college.acceptance_rate }}% Acceptance Rate
+                                </span>
+                                <span class="badge bg-secondary">
+                                    <i class="fas fa-dollar-sign me-1"></i>{{ prediction.college.tuition|floatformat:0|intcomma }} Tuition/Year
+                                </span>
+                            </div>
+                            <a href="{{ prediction.college.website }}" target="_blank" class="btn {% if forloop.first %}btn-success{% else %}btn-outline-primary{% endif %} btn-sm">
+                                <i class="fas fa-external-link-alt me-1"></i>Visit Website
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>No universities found matching your profile. Try adjusting your scores or requirements.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

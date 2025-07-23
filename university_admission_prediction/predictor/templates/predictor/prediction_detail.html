@@ -1,0 +1,90 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Admission Prediction Results</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h4>Your Scores</h4>
+                            <ul class="list-unstyled">
+                                <li><strong>GRE Score:</strong> {{ prediction.gre_score }}</li>
+                                <li><strong>TOEFL Score:</strong> {{ prediction.toefl_score }}</li>
+                                <li><strong>University Rating:</strong> {{ prediction.university_rating }}/5</li>
+                                <li><strong>SOP:</strong> {{ prediction.sop }}/5</li>
+                                <li><strong>LOR:</strong> {{ prediction.lor }}/5</li>
+                                <li><strong>CGPA:</strong> {{ prediction.cgpa }}/10</li>
+                                <li><strong>Research Experience:</strong> {% if prediction.research %}Yes{% else %}No{% endif %}</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-center">
+                                <h4>Admission Chance</h4>
+                                <div class="display-4 mb-2">{{ prediction.admission_chance|floatformat:1 }}%</div>
+                                <div class="h5">
+                                    <span class="badge {% if admission_category == 'Very High' %}bg-success{% elif admission_category == 'High' %}bg-info{% elif admission_category == 'Moderate' %}bg-warning{% else %}bg-danger{% endif %}">
+                                        {{ admission_category }} Chance
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <h4>Recommended Universities</h4>
+                        {% if recommended_colleges %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>University</th>
+                                            <th>Location</th>
+                                            <th>Acceptance Rate</th>
+                                            <th>Minimum Requirements</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for college in recommended_colleges %}
+                                        <tr>
+                                            <td>
+                                                <strong>{{ college.name }}</strong>
+                                                <br>
+                                                <small><a href="{{ college.website }}" target="_blank">Visit Website</a></small>
+                                            </td>
+                                            <td>{{ college.location }}</td>
+                                            <td>{{ college.acceptance_rate }}%</td>
+                                            <td>
+                                                <small>
+                                                    GRE: {{ college.min_gre_score }}<br>
+                                                    TOEFL: {{ college.min_toefl_score }}<br>
+                                                    CGPA: {{ college.min_cgpa }}
+                                                </small>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info">
+                                No universities match your current scores. Consider improving your scores or looking into universities with lower requirements.
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="{% url 'predict' %}" class="btn btn-primary">Make Another Prediction</a>
+                        <a href="{% url 'college_list' %}" class="btn btn-outline-primary">View All Universities</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
